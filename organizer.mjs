@@ -49,7 +49,7 @@ async function createSubDir(directory) {
 	try {
 		await fs.access(directory);
 	} catch (err) {
-		await fs.mkdir(directory, { recursive: true });
+		await fs.mkdir(directory, {recursive: true});
 	}
 }
 
@@ -87,6 +87,7 @@ async function organize(files, dir) {
 		'.cr2',
 		'.orf',
 		'.psd',
+		'.jfif',
 	]);
 	const documents = new Set([
 		'.txt',
@@ -109,9 +110,91 @@ async function organize(files, dir) {
 		'.azw3',
 		'.md',
 		'.rst',
+	]);
+	const development = new Set([
 		'.html',
 		'.xml',
 		'.json',
+		'.css',
+		'.scss',
+		'.less',
+		'.js',
+		'.ts',
+		'.jsx',
+		'.tsx',
+		'.mjs',
+		'.cjs',
+		'.ejs',
+		'.pug',
+		'.hbs',
+		'.vue',
+		'.svelte',
+		'.env',
+		'.sql',
+		'.rb',
+		'.php',
+		'.py',
+		'.go',
+		'.coffee',
+		'.es6',
+		'.elm',
+		'.styl',
+		'.pcss',
+		'.wasm',
+		'.rs',
+		'.graphql',
+		'.gql',
+		'.dart',
+		'.swift',
+		'.sqlite3',
+		'.db',
+		'.bat',
+		'.yml',
+		'.yaml',
+		'.knex.js',
+		'.dockerfile',
+		'.tf',
+		'.ini',
+		'.spec.js',
+		'.test.js',
+		'.cypress.js',
+		'.java',
+		'.cpp',
+		'.cs',
+		'.pl',
+		'.r',
+		'.kt',
+		'.jl',
+		'.ipynb',
+		'.rmd',
+		'.dvc',
+		'.pt',
+		'.h5',
+		'.sh',
+		'.ps1',
+		'.hcl',
+		'.service',
+		'.psql',
+		'.tsv',
+		'.parquet',
+		'.avro',
+		'.apk',
+		'.aab',
+		'.xcworkspace',
+		'.pbxproj',
+		'.unity',
+		'.uasset',
+		'.gltf',
+		'.glb',
+		'.vbs',
+		'.cfg',
+		'.conf',
+		'.haml',
+		'.toml',
+		'.iso',
+		'.vdi',
+		'.qcow2',
+		'.img',
 	]);
 	const audio = new Set([
 		'.wav',
@@ -151,6 +234,15 @@ async function organize(files, dir) {
 			continue; // skip folders
 		}
 
+		// for exe files
+		if (ext === '.exe') {
+			// create exe subdirectory and move to it
+			await createSubDir(dir + '/executable');
+			await moveFile(dir, dir + '/executable', file);
+			found = true;
+		}
+		if (found) continue;
+
 		for (const key of images) {
 			if (key === ext) {
 				// create image subdirectory and move to it
@@ -170,6 +262,15 @@ async function organize(files, dir) {
 				found = true;
 				break;
 			}
+		}
+		if (found) continue;
+
+		for (const key of development) {
+			// create development subdirectory and move to it
+			await createSubDir(dir + '/development');
+			await moveFile(dir, dir + '/development', file);
+			found = true;
+			break;
 		}
 		if (found) continue;
 
@@ -226,4 +327,4 @@ async function verifyDir(dir) {
 }
 
 // export functions
-export { readDir, promptDir, createSubDir, organize };
+export {readDir, promptDir, createSubDir, organize};
