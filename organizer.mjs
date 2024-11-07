@@ -237,8 +237,8 @@ async function organize(files, dir) {
 		// for exe files
 		if (ext === '.exe') {
 			// create exe subdirectory and move to it
-			await createSubDir(dir + '/executable');
-			await moveFile(dir, dir + '/executable', file);
+			await createSubDir(dir + '/software');
+			await moveFile(dir, dir + '/software', file);
 			found = true;
 		}
 		if (found) continue;
